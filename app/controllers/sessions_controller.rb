@@ -172,9 +172,11 @@ class SessionsController < ApplicationController
   def create_sso
 
     logger.info("REMOTE_USER: #{request.env['REMOTE_USER'] or ''}")
-    ENV['REMOTE_USER'] = request.env['REMOTE_USER']
+#    ENV['REMOTE_USER'] = request.env['REMOTE_USER']
     logger.info("HTTP_REMOTE_USER: #{request.env['HTTP_REMOTE_USER'] or ''}")
-    ENV['HTTP_REMOTE_USER'] = request.env['HTTP_REMOTE_USER']
+#    ENV['HTTP_REMOTE_USER'] = request.env['HTTP_REMOTE_USER']
+		params['REMOTE_USER'] = request.env['REMOTE_USER']
+		params['HTTP_REMOTE_USER'] = request.env['HTTP_REMOTE_USER']
 
     # in case, remove switched_from_user_id
     session[:switched_from_user_id] = nil
