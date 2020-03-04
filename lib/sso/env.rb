@@ -4,13 +4,17 @@ module Sso::Env
   def self.check( _params, _config_item )
 
     # try to find user based on login
-    if ENV['REMOTE_USER']
-      user = User.where( login: ENV['REMOTE_USER'], active: true ).first
+		if _params['REMOTE_USER']
+			user = User.where( login: _params['REMOTE_USER'].downcase, active: true ).first
+#    if ENV['REMOTE_USER']
+#      user = User.where( login: ENV['REMOTE_USER'], active: true ).first
       return user if user
     end
 
-    if ENV['HTTP_REMOTE_USER']
-      user = User.where( login: ENV['HTTP_REMOTE_USER'], active: true ).first
+		if _params['HTTP_REMOTE_USER']
+			user = User.where( login: _params['HTTP_REMOTE_USER'].downcase, active: true ).first
+#	    if ENV['HTTP_REMOTE_USER']
+#      user = User.where( login: ENV['HTTP_REMOTE_USER'], active: true ).first
       return user if user
     end
 
