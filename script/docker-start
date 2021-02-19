@@ -1,0 +1,23 @@
+#!/bin/bash
+
+APP_ROOT="/opt/zammad"
+PID_PATH="$APP_ROOT/tmp/pids"
+WEB_SERVER_PID="$PID_PATH/puma.pid"
+#WEBSOCKET_SERVER_PID="$PID_PATH/websocket.pid"
+#SCHEDULER_SERVER_PID="$PID_PATH/websocket.pid"
+
+#APP_USER="zammad"
+PUMA_OPTS="-b tcp://0.0.0.0:3000 -d -e production --pidfile $WEB_SERVER_PID"
+WEBSOCKET_OPTS="-d"
+SCHEDULER_OPTS=""
+
+#NAME="zammad"
+#DESC="Zammad application"
+
+script/initial_run.sh &&
+
+RAILS_ENV=production puma $PUMA_OPTS
+RAILS_ENV=production script/websocket-server.rb start $WEBSOCKET_OPTS &&
+RAILS_ENV=production script/scheduler.rb restart $SCHEDULER_OPTS
+sleep 1 &&
+tail -f log/production.log
