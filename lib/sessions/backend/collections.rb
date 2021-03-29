@@ -7,6 +7,7 @@ class Sessions::Backend::Collections < Sessions::Backend::Base
     @ttl          = ttl
     @asset_lookup = asset_lookup
     @backends     = backend
+    @time_now     = Time.zone.now.to_i
   end
 
   def push
@@ -20,6 +21,15 @@ class Sessions::Backend::Collections < Sessions::Backend::Base
       end
     end
     results
+  end
+
+  def user=(user)
+    @user = user
+
+    # update stored user in backends, too
+    @backends.each do |backend|
+      backend.user = user
+    end
   end
 
   def backend

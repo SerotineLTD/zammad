@@ -191,6 +191,7 @@ Setting.create_or_update(
         options: {
           'relative': 'relative - e. g. "2 hours ago" or "2 days and 15 minutes ago"',
           'absolute': 'absolute - e. g. "Monday 09:30" or "Tuesday 23. Feb 14:20"',
+          'timestamp': 'timestamp - e. g. "2018-08-30 14:30"',
         },
       },
     ],
@@ -2309,6 +2310,28 @@ Setting.create_if_not_exists(
 )
 
 Setting.create_if_not_exists(
+  title: 'Ticket Subject Forward',
+  name: 'ticket_subject_fwd',
+  area: 'Email::Base',
+  description: 'The text at the beginning of the subject in an email forward, e. g. FWD.',
+  options: {
+    form: [
+      {
+        display: '',
+        null: true,
+        name: 'ticket_subject_fwd',
+        tag: 'input',
+      },
+    ],
+  },
+  state: 'FWD',
+  preferences: {
+    permission: ['admin.channel_email'],
+  },
+  frontend: false
+)
+
+Setting.create_if_not_exists(
   title: 'Sender Format',
   name: 'ticket_define_email_from',
   area: 'Email::Base',
@@ -2529,6 +2552,17 @@ Setting.create_if_not_exists(
     online_service_disable: true,
     permission: ['admin.channel_email'],
   },
+  frontend: false
+)
+
+Setting.create_if_not_exists(
+  title: 'Bcc address for all outgoing emails',
+  name: 'system_bcc',
+  area: 'Email::Enhanced',
+  description: 'To archive all outgoing emails from Zammad to external, you can store a bcc email address here.',
+  options: {},
+  state: '',
+  preferences: { online_service_disable: true },
   frontend: false
 )
 
@@ -2939,6 +2973,41 @@ Setting.create_if_not_exists(
 )
 
 Setting.create_if_not_exists(
+  title:       'Sequencer log level',
+  name:        'sequencer_log_level',
+  area:        'Core',
+  description: 'Defines the log levels for various logging actions of the Sequencer.',
+  options:     {},
+  state:       {
+    sequence: {
+      start_finish: :debug,
+      unit:         :debug,
+      result:       :debug,
+    },
+    state: {
+      optional: :debug,
+      set:      :debug,
+      get:      :debug,
+      attribute_initialization: {
+        start_finish: :debug,
+        attributes:   :debug,
+      },
+      parameter_initialization: {
+        parameters:   :debug,
+        start_finish: :debug,
+        unused:       :debug,
+      },
+      expectations_initialization: :debug,
+      cleanup: {
+        start_finish: :debug,
+        remove:       :debug,
+      }
+    }
+  },
+  frontend: false,
+)
+
+Setting.create_if_not_exists(
   title: 'Time Accounting',
   name: 'time_accounting',
   area: 'Web::Base',
@@ -3152,6 +3221,15 @@ Setting.create_if_not_exists(
   description: 'Defines postmaster filter to identify postmaster bounced - disable sending notification on permanent deleivery failed.',
   options: {},
   state: 'Channel::Filter::BounceDeliveryPermanentFailed',
+  frontend: false
+)
+Setting.create_if_not_exists(
+  title: 'Defines postmaster filter.',
+  name: '0955_postmaster_filter_bounce_delivery_temporary_failed',
+  area: 'Postmaster::PreFilter',
+  description: 'Defines postmaster filter to identify postmaster bounced - reopen ticket on permanent temporary failed.',
+  options: {},
+  state: 'Channel::Filter::BounceDeliveryTemporaryFailed',
   frontend: false
 )
 Setting.create_if_not_exists(

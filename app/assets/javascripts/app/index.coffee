@@ -2,6 +2,7 @@
 
 #= require_self
 #= require_tree ./lib/app_init
+#= require_tree ./lib/mixins
 #= require ./config.coffee
 #= require_tree ./models
 #= require_tree ./controllers
@@ -83,6 +84,10 @@ class App extends Spine.Controller
     # define session helper
     S: (key) ->
       App.Session.get(key)
+
+    # define view helper for rendering partial views
+    V: (name, params) ->
+      App.view(name)(params)
 
     # define address line helper
     AddressLine: (line) ->
